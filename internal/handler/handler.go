@@ -24,7 +24,7 @@ func (h *Handler) HandleWalletOperation(c *gin.Context) {
 	}
 
 	transaction := &entity.Transaction{
-		ID:            generateUUID(), // Генерация UUID
+		ID:            generateUUID(),
 		WalletID:      req.WalletID,
 		OperationType: req.OperationType,
 		Amount:        req.Amount,
@@ -46,7 +46,6 @@ func (h *Handler) HandleWalletOperation(c *gin.Context) {
 		return
 	}
 
-	// Сохраняем транзакцию
 	if err := h.service.CreateTransaction(transaction); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save transaction"})
 		return

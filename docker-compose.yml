@@ -40,7 +40,7 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      - config.env  # Указываем файл с переменными окружения
+      - config.env
     depends_on:
       - postgres
 

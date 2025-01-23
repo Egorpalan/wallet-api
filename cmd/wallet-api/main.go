@@ -31,7 +31,6 @@ func main() {
 	srv.Router.GET("/api/v1/wallets/:walletId", handlers.GetBalance)
 	srv.Router.POST("/api/v1/wallets", handlers.CreateWallet)
 
-	// Запускаем сервер
 	if err := srv.Run(); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
