@@ -1,8 +1,5 @@
-build:
-	docker-compose build wallet-api
-
 run:
-	docker-compose up wallet-api
+	docker-compose up --build
 
 test:
 	go test -v ./...
