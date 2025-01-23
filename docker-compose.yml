@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: wallet_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: wallet
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  migrate:
+    image: migrate/migrate
+    container_name: wallet_migrate
+    volumes:
+      - ./migrations:/migrations
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=wallet
+      - DB_SSLMODE=disable
+    command:
+      - "-path=/migrations"
+      - "-database=postgres://postgres:postgres@postgres:5432/wallet?sslmode=disable"
+      - "up"
+    depends_on:
+      - postgres
+
+  wallet-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wallet_api
+    ports:
+      - "8080:8080"
+    env_file:
+      - config.env  # Указываем файл с переменными окружения
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
