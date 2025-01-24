@@ -27,7 +27,7 @@ func NewServer(cfg *config.Config) *Server {
 }
 
 func (s *Server) Run() error {
-	logrus.Printf("Server is running on port %s\n", s.Config.ServerPort)
+	logrus.Printf("Server is running on port %s", s.Config.ServerPort)
 	return s.httpServer.ListenAndServe()
 }
 

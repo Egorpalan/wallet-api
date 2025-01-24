@@ -3,7 +3,7 @@ package repository
 import (
 	"database/sql"
 	"github.com/Egorpalan/wallet/internal/entity"
-	"log"
+	"github.com/sirupsen/logrus"
 )
 
 type Repository struct {
@@ -43,7 +43,7 @@ func (r *Repository) CreateTransaction(transaction *entity.Transaction) error {
 	query := `INSERT INTO transactions (id, wallet_id, operation_type, amount) VALUES ($1, $2, $3, $4)`
 	_, err := r.db.Exec(query, transaction.ID, transaction.WalletID, transaction.OperationType, transaction.Amount)
 	if err != nil {
-		log.Printf("Failed to create transaction: %v", err)
+		logrus.Errorf("Failed to create transaction: %s", err.Error())
 	}
 	return err
 }
