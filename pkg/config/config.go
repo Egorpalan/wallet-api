@@ -1,7 +1,7 @@
 package config
 
 import (
-	"log"
+	"github.com/sirupsen/logrus"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -20,8 +20,10 @@ type Config struct {
 func LoadConfig(path string) (*Config, error) {
 	err := godotenv.Load(path)
 	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+		logrus.Fatalf("Error loading .env file: %s", err.Error())
 	}
+
+	logrus.Info(".env file loaded successfully")
 
 	return &Config{
 		ServerPort: os.Getenv("SERVER_PORT"),

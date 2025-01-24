@@ -16,6 +16,17 @@ func NewHandler(service *service.Service) *Handler {
 	return &Handler{service: service}
 }
 
+// HandleWalletOperation handles wallet deposit and withdrawal operations
+// @Summary Perform wallet operation
+// @Description Deposit or withdraw funds from a wallet
+// @Tags wallet
+// @Accept json
+// @Produce json
+// @Param request body entity.TransactionRequest true "Transaction data"
+// @Success 200 {object} handler.StandardResponse "Operation successful"
+// @Failure 400 {object} handler.ErrorResponse "Invalid request payload"
+// @Failure 500 {object} handler.ErrorResponse "Failed to process transaction"
+// @Router /api/v1/wallet [post]
 func (h *Handler) HandleWalletOperation(c *gin.Context) {
 	var req entity.TransactionRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -54,6 +65,15 @@ func (h *Handler) HandleWalletOperation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Operation successful"})
 }
 
+// GetBalance retrieves wallet balance
+// @Summary Get wallet balance
+// @Description Get the current balance of a wallet by walletId
+// @Tags wallet
+// @Produce json
+// @Param walletId path string true "Wallet ID"
+// @Success 200 {object} handler.BalanceResponse "Wallet balance"
+// @Failure 500 {object} handler.ErrorResponse "Failed to get balance"
+// @Router /api/v1/wallets/{walletId} [get]
 func (h *Handler) GetBalance(c *gin.Context) {
 	walletID := c.Param("walletId")
 
@@ -66,6 +86,17 @@ func (h *Handler) GetBalance(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"balance": balance})
 }
 
+// CreateWallet creates a new wallet
+// @Summary Create a wallet
+// @Description Create a new wallet with initial balance
+// @Tags wallet
+// @Accept json
+// @Produce json
+// @Param request body entity.Wallet true "Wallet ID"
+// @Success 200 {object} handler.StandardResponse "Wallet created successfully"
+// @Failure 400 {object} handler.ErrorResponse "Invalid request payload"
+// @Failure 500 {object} handler.ErrorResponse "Failed to create wallet"
+// @Router /api/v1/wallets [post]
 func (h *Handler) CreateWallet(c *gin.Context) {
 	var req struct {
 		WalletID string `json:"walletId"`

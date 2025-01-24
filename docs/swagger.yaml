@@ -1,0 +1,123 @@
+definitions:
+  entity.TransactionRequest:
+    properties:
+      amount:
+        type: integer
+      operationType:
+        type: string
+      walletId:
+        type: string
+    type: object
+  entity.Wallet:
+    properties:
+      balance:
+        type: integer
+      walletId:
+        type: string
+    type: object
+  handler.BalanceResponse:
+    properties:
+      balance:
+        type: number
+    type: object
+  handler.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  handler.StandardResponse:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a wallet management API
+  title: Wallet API
+  version: "1.0"
+paths:
+  /api/v1/wallet:
+    post:
+      consumes:
+      - application/json
+      description: Deposit or withdraw funds from a wallet
+      parameters:
+      - description: Transaction data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.TransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Operation successful
+          schema:
+            $ref: '#/definitions/handler.StandardResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Failed to process transaction
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Perform wallet operation
+      tags:
+      - wallet
+  /api/v1/wallets:
+    post:
+      consumes:
+      - application/json
+      description: Create a new wallet with initial balance
+      parameters:
+      - description: Wallet ID
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Wallet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Wallet created successfully
+          schema:
+            $ref: '#/definitions/handler.StandardResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Failed to create wallet
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Create a wallet
+      tags:
+      - wallet
+  /api/v1/wallets/{walletId}:
+    get:
+      description: Get the current balance of a wallet by walletId
+      parameters:
+      - description: Wallet ID
+        in: path
+        name: walletId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Wallet balance
+          schema:
+            $ref: '#/definitions/handler.BalanceResponse'
+        "500":
+          description: Failed to get balance
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get wallet balance
+      tags:
+      - wallet
+swagger: "2.0"

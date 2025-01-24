@@ -1,22 +1,37 @@
 package server
 
 import (
+	"context"
 	"github.com/Egorpalan/wallet/pkg/config"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	"net/http"
 )
 
 type Server struct {
-	Router *gin.Engine
-	Config *config.Config
+	httpServer *http.Server
+	Router     *gin.Engine
+	Config     *config.Config
 }
 
 func NewServer(cfg *config.Config) *Server {
+	router := gin.Default()
 	return &Server{
-		Router: gin.Default(),
+		Router: router,
 		Config: cfg,
+		httpServer: &http.Server{
+			Addr:    ":" + cfg.ServerPort,
+			Handler: router,
+		},
 	}
 }
 
 func (s *Server) Run() error {
-	return s.Router.Run(":" + s.Config.ServerPort)
+	logrus.Printf("Server is running on port %s\n", s.Config.ServerPort)
+	return s.httpServer.ListenAndServe()
+}
+
+func (s *Server) Shutdown(ctx context.Context) error {
+	logrus.Info("Shutting down server...")
+	return s.httpServer.Shutdown(ctx)
 }

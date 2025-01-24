@@ -18,7 +18,19 @@ Wallet API
    git clone https://github.com/Egorpalan/wallet-api.git
    cd wallet-api
 
-2. Запустите приложение
+2. Настройка переменных окружения
+   Перед запуском проекта создайте файл `config.env` в корне проекта и заполните его своими значениями:
+
+   ```bash
+   SERVER_PORT=8080
+   DB_HOST=postgres
+   DB_PORT=5432
+   DB_USER=postgres
+   DB_PASSWORD=postgres
+   DB_NAME=wallet
+   DB_SSLMODE=disable
+
+3. Запустите приложение
     ```bash
    make run
 

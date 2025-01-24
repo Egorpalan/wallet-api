@@ -5,8 +5,14 @@ import (
 )
 
 type Wallet struct {
-	ID      string `json:"id"`
+	ID      string `json:"walletId"`
 	Balance int64  `json:"balance"`
+}
+
+type TransactionRequest struct {
+	WalletID      string `json:"walletId"`
+	OperationType string `json:"operationType"`
+	Amount        int64  `json:"amount"`
 }
 
 type Transaction struct {
@@ -15,10 +21,4 @@ type Transaction struct {
 	OperationType string    `json:"operation_type"`
 	Amount        int64     `json:"amount"`
 	CreatedAt     time.Time `json:"created_at"`
-}
-
-type TransactionRequest struct {
-	WalletID      string `json:"walletId"`
-	OperationType string `json:"operationType"`
-	Amount        int64  `json:"amount"`
 }
